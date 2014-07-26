@@ -1,5 +1,5 @@
 """
-Project Euler - Problem 3
+Project Euler - Problem 2
 Copyright (C) 2014  Thomas Vanesse
 
 This program is free software; you can redistribute it and/or modify
