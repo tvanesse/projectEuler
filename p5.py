@@ -30,24 +30,37 @@ def p5(n):
 	# Same reasoning for 12, 6 and 3, etc... So we can reduce the amount of numbers that need to
 	# be tested to a very limited subset.
 	# `n` should be between 11 and 20
-	my_range = arange(11, n+1, 1)
-#	my_range = arange(2, n+1, 1)
-	candid = 232792560	# answer for 19, TODO: think about an implementation where you compute candid for n-1 and then restart for n to save some CPU time
-#	candid = 2520
+
+	def test(cand, some_range):
+		for i in some_range:
+			if cand % i != 0:
+				return False
+		return True
 	
-	while True:
-		fail = False
-		for i in my_range:
-			if candid % i != 0:
+	candid = 2520	
+	for i in arange(12, n+1, 1):
+		# It seems like trying to find the result for 11, then restart from
+		# that result to find 12, then restart from that result to find 13,...
+		# is more efficient than directly trying to browse through all the numbers
+		# for my_range = arange(11, n+1, 1).
+		my_range = arange(11, i+1, 1)
+		print("Trying to find the answer for " + str(my_range))
+		
+		loop = True
+		while loop:
+			attemp = test(candid, my_range)
+			if not attemp:
 				candid += 1
-				fail = True
-				break
-		if not fail:
-			return candid
+			else :
+				loop = False
+		print("The answer for " + str(my_range) + " is " + str(candid))
+	
+	return candid
 	
 if __name__ == '__main__':
 	import timeit
 	print("Starting...")
-	print(p5(20))
-#	print(timeit.timeit("p5(19)", setup="from __main__ import p5", number=1))
-	
+	r = p5(20)
+	print(r)
+#	print(timeit.timeit("p5(20)", setup="from __main__ import p5", number=1))
+	# Found in 6,88 [min] on my machine. Perhaps it could be improved by using the multiprocessing library.
